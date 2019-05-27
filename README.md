@@ -19,4 +19,4 @@
 
 + Para facilitar os testes, o aplicativo possui a opção de configurar o IP do servidor
 
-![Configuração do IP](print.jpeg?raw=true "Configuração do IP")
+<img src="/images/print.jpeg" width="40%">
