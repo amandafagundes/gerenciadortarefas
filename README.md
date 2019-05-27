@@ -1,0 +1,16 @@
+# Sobre a aplicação
+
++ Sistema para gerenciamento de tarefas composto por um sistema web e um aplicativo android, no qual as tarefas são criadas via sistema e concluídas através do aplicativo.
+	+ Interface Web: ReactJS
+	+ Servidor: Spring Framework
+	+ Banco de dados: MySQL
+	+ Aplicativo: Android (Java)
+
++ Para rodar o servidor é necessário executar o script `script.sh` através do comando:
+	+ `$ chmod +x script.sh`
+	+ `$ ./script.sh`
+
++ Com isso, o banco de dados será criado e o servidor iniciará sua execução. Para executar o sistema, rode o comando abaixo dentro do diretório `React/desafioweb` (necessário ter o npm instalado)
+	+ `npm start`
+
++ Para executar o aplicativo, utilize o Android Studio para compilar o projeto no diretório `Aplicativo`
