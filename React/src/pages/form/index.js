@@ -23,17 +23,19 @@ class Form extends Component {
         }
         if (this.state.value != '') {
             api.post('task/create', task).then(response => {
-                console.log(response);
                 if (response.status == 200) {
-                    this.setState({ success: true });
-                    console.log('success ' + this.state.success);
+                    this.setState(({
+                        success: true,
+                        submited: true,
+                    }));
                 } else {
-                    this.setState({ success: false });
-                    console.log('error ' + this.state.success);
+                    this.setState(({
+                        success: false,
+                        submited: true,
+                    }));
                 }
             })
         }
-        this.setState({ submited: true });
     };
 
     render() {

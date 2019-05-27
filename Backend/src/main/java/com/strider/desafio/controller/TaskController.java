@@ -94,16 +94,6 @@ public class TaskController {
                     new FileOutputStream(image));
             stream.write(file.getBytes());
             stream.close();
-
-            try {
-                Files.copy(file.getInputStream(), Paths.get(fileName));
-            } catch (NoSuchFileException e) {
-                new File(path).mkdirs();
-                Files.copy(file.getInputStream(), Paths.get(fileName));
-            } catch (FileAlreadyExistsException e) {
-                new File(fileName).delete();
-                Files.copy(file.getInputStream(), Paths.get(fileName));
-            }
             Task task = repository.getOne(id);
             task.setImage(fileName);
             repository.save(task);

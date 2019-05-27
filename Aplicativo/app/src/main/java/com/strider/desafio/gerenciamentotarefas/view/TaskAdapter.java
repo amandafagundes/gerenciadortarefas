@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.strider.desafio.gerenciamentotarefas.R;
-import com.strider.desafio.gerenciamentotarefas.Util.RetrofitSettings;
+import com.strider.desafio.gerenciamentotarefas.util.RetrofitSettings;
 import com.strider.desafio.gerenciamentotarefas.model.Task;
 
 import java.io.File;

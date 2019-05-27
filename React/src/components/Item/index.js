@@ -26,7 +26,6 @@ class Item extends Component {
 
   loadImages = () => {
     this.state.tasks.map(async (task) => {
-      console.log('ID: ' + task.id);
       var response = await axios({
         method: 'get',
         url: 'http://localhost:8080/task/image',
@@ -35,13 +34,12 @@ class Item extends Component {
           id: task.id
         }
       });
-      task.image = _imageEncode(response.data);
+      task.image = response.data != null ? _imageEncode(response.data) : null;
     })
   }
 
 
   toggleCollapse = collapseID => () => {
-    console.log(collapseID);
     this.setState(prevState => ({
       collapseID: prevState.collapseID !== collapseID ? collapseID : ""
     }));
@@ -51,9 +49,10 @@ class Item extends Component {
     var param = {
       status: status,
     }
-    console.log('****' + status);
-    this.setState({ status: status });
-    this.setState({ tasks: [] });
+    this.setState(({
+      status: status,
+      tasks: []
+    }))
     var response = await api.post('/task/list', status != '' ? param : null);
     this.setState({ tasks: response.data });
     this.loadImages();
@@ -63,9 +62,11 @@ class Item extends Component {
     var param = {
       id: id,
     }
-    this.setState({ submited: true });
-    this.setState({ status: status });
-    this.setState({ tasks: [] });
+    this.setState( prevState =>({
+      submited: true,
+      status: prevState.status,
+      tasks: [],
+    }))
     var response = await api.delete('/task/delete/' + id);
     if (response.status == 200) this.setState({ success: true });
     else this.setState({ succes: false });
@@ -113,7 +114,10 @@ class Item extends Component {
                 <Link id="btn-delete" onClick={this.deleteTask(task.id)}>Excluir</Link>
               </div>
               <MDBCollapse id={'' + task.id + ''} isOpen={this.state.collapseID}>
-                <p><img src={task.image} /></p>
+                {
+                  task.image != null &&
+                  <p><img src={task.image} /></p>
+                }
               </MDBCollapse>
             </article>
           ))}

@@ -1,4 +1,4 @@
-package com.strider.desafio.gerenciamentotarefas.Util;
+package com.strider.desafio.gerenciamentotarefas.util;
 
 import android.content.Context;
 import android.content.Intent;

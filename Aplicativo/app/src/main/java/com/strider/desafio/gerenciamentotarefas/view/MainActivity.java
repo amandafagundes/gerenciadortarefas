@@ -1,6 +1,7 @@
 package com.strider.desafio.gerenciamentotarefas.view;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,13 +9,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.strider.desafio.gerenciamentotarefas.R;
-import com.strider.desafio.gerenciamentotarefas.Util.RetrofitSettings;
+import com.strider.desafio.gerenciamentotarefas.util.Prefs;
+import com.strider.desafio.gerenciamentotarefas.util.RetrofitSettings;
 import com.strider.desafio.gerenciamentotarefas.model.Task;
 
 import java.util.HashMap;
@@ -26,6 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mNoRequests;
     ListView mTasks;
     ProgressBar mProressBar;
-    TaskAdapter adapater;
+    TaskAdapter adapater; Subscription subscription= null;
+    Observable<Long> observable = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +55,18 @@ public class MainActivity extends AppCompatActivity {
         mNoRequests = (TextView) findViewById(R.id.no_requests);
 
         checkPermissions();
+        checkApiBaseUrl();
 
-        Observable.interval(10, TimeUnit.SECONDS)
+        subscribe();
+
+    }
+
+    public void subscribe(){
+        mProressBar.setVisibility(View.VISIBLE);
+        mNoRequests.setVisibility(View.GONE);
+        mTasks.setVisibility(View.GONE);
+        observable = Observable.interval(10, TimeUnit.SECONDS);
+        subscription = observable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Long>() {
                     @Override
@@ -96,6 +116,57 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
+    }
+
+    private void checkApiBaseUrl() {
+        try {
+            if (RetrofitSettings.API_BASE_URL.isEmpty())
+                RetrofitSettings.changeApiBaseUrl(Prefs.getString(getContext(), "IP"));
+        }catch (IllegalArgumentException e){
+            showIpDialog();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        showIpDialog();
+        return true;
+    }
+
+    private void showIpDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dialog_ip, null);
+        dialog.setContentView(view);
+
+        final EditText mEditText = dialog.findViewById(R.id.ip);
+        Button mSaveButton = dialog.findViewById(R.id.save);
+
+        dialog.show();
+
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ip = mEditText.getText().toString();
+                if (ip.isEmpty() || ip.trim().isEmpty()) {
+                    mEditText.setError("Campo obrigatório!");
+                }else {
+                    Prefs.setString(getContext(), "IP", "http://" + ip + ":8080");
+                    RetrofitSettings.changeApiBaseUrl(Prefs.getString(getContext(), "IP"));
+                    subscription.unsubscribe();
+                    subscribe();
+                    dialog.dismiss();
+                }
+            }
+        });
     }
 
     private Context getContext() {
@@ -119,14 +190,6 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
             }, 0);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         }
 
     }

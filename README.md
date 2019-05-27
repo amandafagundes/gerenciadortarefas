@@ -10,7 +10,7 @@
 	+ `$ chmod +x script.sh`
 	+ `$ ./script.sh`
 
-+ Com isso, o banco de dados será criado e o servidor iniciará sua execução. Para executar o sistema, rode o comando abaixo dentro do diretório `React/desafioweb` (necessário ter o npm instalado)
++ Com isso, as dependências necessárias para executar a aplicação web serão instaladas, o banco de dados será criado e o servidor iniciará sua execução. Para executar o sistema, rode o comando abaixo dentro do diretório `React` (necessário ter o npm instalado)
 	+ `npm start`
 
 + Para executar o aplicativo, utilize o Android Studio para compilar o projeto no diretório `Aplicativo`

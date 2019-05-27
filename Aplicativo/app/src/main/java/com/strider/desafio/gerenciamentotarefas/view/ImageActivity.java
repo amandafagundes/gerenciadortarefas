@@ -1,13 +1,17 @@
 package com.strider.desafio.gerenciamentotarefas.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,8 +27,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.strider.desafio.gerenciamentotarefas.R;
-import com.strider.desafio.gerenciamentotarefas.Util.Permission;
-import com.strider.desafio.gerenciamentotarefas.Util.Util;
+import com.strider.desafio.gerenciamentotarefas.util.Permission;
+import com.strider.desafio.gerenciamentotarefas.util.Util;
 import com.strider.desafio.gerenciamentotarefas.model.Task;
 
 public class ImageActivity extends AppCompatActivity {
@@ -46,6 +50,8 @@ public class ImageActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
         if (args != null) task = (Task) args.getSerializable(("task"));
+
+        checkPermissions();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -152,7 +158,7 @@ public class ImageActivity extends AppCompatActivity {
                 break;
 
         }
-        if (data == null || data.getData() != null) {
+        if (data != null || data.getData() != null || data.getExtras().get("data") != null) {
             mButton.setVisibility(View.GONE);
             mImage.setVisibility(View.VISIBLE);
         } else {
@@ -177,6 +183,18 @@ public class ImageActivity extends AppCompatActivity {
             mImage.setImageBitmap(photo);
             filePath = Util.getRealPathFromURI(getContext(), Util.getImageUri(getContext(), photo));
         }
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }
+
     }
 }
 
