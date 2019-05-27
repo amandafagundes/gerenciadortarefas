@@ -1,0 +1,107 @@
+#main{
+    width: 100%;
+    max-width: 500px;
+}
+
+.Navbar {
+    height: 40px;
+    border: solid 1px #000000;
+    border-radius: 5px;
+    margin: 10px;
+    display: flex;
+    padding: 8px;
+  }
+
+.nav-items {
+    width: 100%;
+    display:flex;
+    text-align: center;
+}
+
+.nav-item {
+    width: 100%;
+  }
+
+#pending {
+    width: 100%;
+    display: block;
+    color: #069;
+    border-right: 1px solid #000000; 
+    border-left: 1px solid #000000; 
+}
+
+#btn-new {
+    margin: 10px;
+    height: 42px;
+    border-radius: 5px;
+    border: 2px solid #008060;
+    background: none;
+    margin-top: 10px;
+    color: #008060;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2ms;
+}
+
+#btn-new:hover{
+    background: #008060;
+    color: #fff;
+}
+
+#btn-delete {
+    height: 30px;
+    width: 60px;
+    border-radius: 5px;
+    border: 2px solid #b91600;
+    background: none;
+    color: #b91600;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    margin-left:auto;
+    margin-right:0;
+    padding: 1px;
+    transition: all 0.2ms;
+}
+
+#btn-delete:hover {
+    background: #b91600;
+    color: #fff;
+}
+
+.tasks-list{
+    width: 100%;
+    margin: 0px;
+    padding: 5px;
+}
+
+.tasks-list article{
+    min-height: 50px;
+    width: auto;
+    background: #FFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.tasks-list article div{
+    align-items: center;
+}
+
+.tasks-list article p img {
+    width: 100%;
+    height: auto;
+    font-size: 16px;
+    color: #000000;
+    margin-top: 5px;
+    line-height: 24px;
+    justify-content: center;
+    align-items: center;
+}
+
+
